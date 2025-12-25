@@ -1,13 +1,24 @@
 # marp-slides
 
-This repository is a **Markdown-first presentation workspace** using **Marp**.
+This repository is a **Markdown-first presentation workspace** built on **Marp**.
 
-All slides are authored in Markdown and exported into multiple formats depending on purpose:
+Slides are authored in Markdown and exported into purpose-specific artifacts:
 
-- **HTML** for GitHub Pages (publishing / sharing)
-- **PowerPoint (.pptx)** for talks and offline presentations
+- **HTML** for publishing and sharing via GitHub Pages  
+- **PowerPoint (.pptx)** for talks and offline presentations  
 
-The goal of this repository is to **separate thinking from formatting** and make slide creation reproducible, fast, and version-controlled.
+The core goal is to **separate thinking from formatting** and make slide creation
+**reproducible, fast, and version-controlled**.
+
+---
+
+## 📊 Published Slides
+
+- **Physical-First Engineering & Intelligent Control Architecture**  
+  https://samizo-aitl.github.io/marp-slides/dist/physical-first.html
+
+> GitHub Pages serves **pre-generated HTML only**.  
+> Markdown files are never rendered directly by GitHub Pages.
 
 ---
 
@@ -16,11 +27,12 @@ The goal of this repository is to **separate thinking from formatting** and make
 - **Markdown is the single source of truth**
 - **HTML is the published artifact**
 - **PowerPoint is the presentation artifact**
-- GitHub Pages does **not** execute Marp
+- **GitHub Pages does not execute Marp**
 
-This clear separation prevents common issues such as:
-- "Markdown updated but the page did not change"
-- "PowerPoint is out of sync with the source"
+This strict separation prevents common failures such as:
+
+- “Markdown was updated but the page did not change”
+- “PowerPoint slides are out of sync with the source”
 
 ---
 
@@ -29,19 +41,12 @@ This clear separation prevents common issues such as:
 ```text
 marp-slides/
 ├ slides/        # Marp source files (Markdown)
-│  ├ physical-first.md
-│  └ aitl-architecture.md
+│  └ physical-first.md
 │
-├ dist/          # Generated artifacts
-│  ├ physical-first.html
-│  └ physical-first.pptx
+├ dist/          # Generated artifacts (published)
+│  └ physical-first.html
 │
-├ themes/        # Custom Marp themes
-│  └ physical-first.css
-│
-├ .github/
-│  └ workflows/
-│     └ marp-build.yml
+├ themes/        # Custom Marp themes (optional / future use)
 │
 └ README.md
 ```
@@ -50,12 +55,23 @@ marp-slides/
 
 ## Authoring Slides
 
-Edit only the Markdown files under `slides/`.
+Edit **only** Markdown files under `slides/`.
 
 Example:
 
 ```text
 slides/physical-first.md
+```
+
+Each file must include a Marp front matter header:
+
+```yaml
+---
+marp: true
+theme: default
+paginate: true
+size: 16:9
+---
 ```
 
 ---
@@ -74,32 +90,36 @@ marp slides/physical-first.md --html -o dist/physical-first.html
 marp slides/physical-first.md --pptx
 ```
 
-PowerPoint files are treated as **generated artifacts** and are not required to be committed.
+- HTML is a **published artifact** and should be committed
+- PPTX is a **presentation artifact** and does not need to be committed
 
 ---
 
 ## Publishing with GitHub Pages
 
-If GitHub Pages is enabled, configure it to serve from:
+GitHub Pages is configured to deploy from the repository root.
 
-```
-/dist
+Slides are accessed via **direct HTML paths**, for example:
+
+```text
+/dist/physical-first.html
 ```
 
-Only HTML files are published.
+This avoids relying on GitHub Pages folder heuristics and keeps deployment explicit
+and predictable.
 
 ---
 
 ## Recommended Workflow
 
 ```text
-1. Write slides in Markdown
-2. Export HTML for publishing
-3. Export PPTX for presentation
-4. Commit HTML only
+1. Write slides in Markdown (slides/)
+2. Generate HTML for publishing (dist/)
+3. Generate PPTX for presentation
+4. Commit Markdown + HTML only
 ```
 
-This workflow keeps the repository clean and predictable.
+This keeps the repository clean and ensures reproducibility.
 
 ---
 
@@ -117,5 +137,3 @@ npm install -g @marp-team/marp-cli
 ## License
 
 MIT License
-```
-
