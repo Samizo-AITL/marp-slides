@@ -30,6 +30,10 @@ jobs:
             marp "$file" --html -o "dist/$name.html"
           done
 
+      - name: Set index.html
+        run: |
+          cp dist/physical-first.html dist/index.html
+
       - name: Build PPTX slides
         run: |
           for file in slides/*.md; do
