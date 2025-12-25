@@ -1,9 +1,5 @@
 name: Build Marp Slides
 
-# ★ これがないと push できない
-permissions:
-  contents: write
-
 on:
   push:
     paths:
@@ -13,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write   # ← これ重要（403対策）
 
     steps:
       - name: Checkout repository
@@ -26,6 +25,9 @@ jobs:
       - name: Install Marp CLI
         run: npm install -g @marp-team/marp-cli
 
+      # ----------------------------
+      # HTML 出力（Pages 用）
+      # ----------------------------
       - name: Build HTML slides
         run: |
           mkdir -p dist
@@ -34,21 +36,29 @@ jobs:
             marp "$file" --html -o "dist/$name.html"
           done
 
+      # index.html を代表スライドに
       - name: Set index.html
         run: |
-          # 代表スライドをトップにする（必要に応じて変更）
-          cp dist/physical-first.html dist/index.html
+          cp dist/physical-first.html dist/index.html || true
 
+      # ----------------------------
+      # PPTX 出力（配布用）
+      # ----------------------------
       - name: Build PPTX slides
         run: |
+          mkdir -p dist/pptx
           for file in slides/*.md; do
-            marp "$file" --pptx
+            name=$(basename "$file" .md)
+            marp "$file" --pptx -o "dist/pptx/$name.pptx"
           done
 
-      - name: Commit generated HTML
+      # ----------------------------
+      # Commit & Push
+      # ----------------------------
+      - name: Commit generated files
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add dist/*.html
-          git commit -m "Auto-generate Marp HTML slides" || echo "No changes to commit"
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add dist
+          git commit -m "Auto-generate Marp HTML & PPTX slides" || echo "No changes"
           git push
