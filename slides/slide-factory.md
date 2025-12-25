@@ -4,7 +4,7 @@ theme: default
 paginate: true
 size: 16:9
 title: Marp × GitHub Actions で「スライド工場」を作る
-description: Markdownを唯一の正としてHTML公開とPPTX生成を自動化する
+description: Markdownを唯一の正としてHTML公開とPPTX生成を自動化する　
 ---
 
 # 🏭 Marp × GitHub Actions で「スライド工場」を作る
