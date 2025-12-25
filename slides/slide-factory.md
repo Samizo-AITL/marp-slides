@@ -4,7 +4,38 @@ theme: default
 paginate: true
 size: 16:9
 title: Marp × GitHub Actions で「スライド工場」を作る
-description: Markdownを唯一の正としてHTML公開とPPTX生成を自動化する　 
+description: Markdownを唯一の正としてHTML公開とPPTX生成を自動化する
+
+style: |
+  /* ===== 全体フォント（日本語安全） ===== */
+  section {
+    font-family:
+      "Noto Sans JP",
+      "Yu Gothic",
+      "Meiryo",
+      "Hiragino Sans",
+      "Segoe UI",
+      sans-serif;
+  }
+
+  /* ===== インラインコード / コードブロック（豆腐の主犯） ===== */
+  code, pre {
+    font-family:
+      "Noto Sans Mono JP",
+      "Noto Sans JP",
+      "Meiryo",
+      monospace;
+    font-size: 0.9em;
+  }
+
+  /* ===== 箇条書き・表も念のため固定 ===== */
+  li, table, th, td {
+    font-family:
+      "Noto Sans JP",
+      "Yu Gothic",
+      "Meiryo",
+      sans-serif;
+  }
 ---
 
 # 🏭 Marp × GitHub Actions で「スライド工場」を作る
