@@ -1,5 +1,9 @@
 name: Build Marp Slides
 
+# ★ これがないと push できない
+permissions:
+  contents: write
+
 on:
   push:
     paths:
@@ -32,6 +36,7 @@ jobs:
 
       - name: Set index.html
         run: |
+          # 代表スライドをトップにする（必要に応じて変更）
           cp dist/physical-first.html dist/index.html
 
       - name: Build PPTX slides
@@ -42,8 +47,8 @@ jobs:
 
       - name: Commit generated HTML
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add dist/*.html
           git commit -m "Auto-generate Marp HTML slides" || echo "No changes to commit"
           git push
