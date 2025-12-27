@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "slides/**/*.md"
+      - "themes/**/*.css"
   workflow_dispatch:
 
 jobs:
@@ -30,12 +31,14 @@ jobs:
       # ----------------------------
       - name: Build HTML slides
         run: |
+          set -e
           mkdir -p dist
           for file in slides/*.md; do
             name=$(basename "$file" .md)
             marp "$file" \
               --html \
               --theme themes/jp-pptx.css \
+              --allow-local-files \
               -o "dist/$name.html"
           done
 
@@ -48,6 +51,7 @@ jobs:
       # ----------------------------
       - name: Build PPTX slides
         run: |
+          set -e
           mkdir -p dist/pptx
           for file in slides/*.md; do
             name=$(basename "$file" .md)
@@ -55,6 +59,7 @@ jobs:
               --pptx \
               --pptx-editable=false \
               --theme themes/jp-pptx.css \
+              --allow-local-files \
               -o "dist/pptx/$name.pptx"
           done
 
