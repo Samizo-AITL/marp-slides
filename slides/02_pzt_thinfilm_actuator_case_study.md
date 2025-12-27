@@ -5,7 +5,7 @@ description: FeRAM起源からPrecisionCore µTFPまでの技術連続性と量�
 author: Shinichi Samizo
 theme: jp-pptx
 paginate: true
----
+---　
 
 # 薄膜PZTアクチュエータ  　
 ## 技術史と量産信頼性　
