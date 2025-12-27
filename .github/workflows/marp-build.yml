@@ -4,14 +4,10 @@ on:
   push:
     paths:
       - "slides/**/*.md"
-      - "themes/**/*.css"
-    paths-ignore:
-      - "dist/**"
   workflow_dispatch:
 
 jobs:
   build:
-    if: github.actor != 'github-actions'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -25,45 +21,6 @@ jobs:
 
       - run: npm install -g @marp-team/marp-cli
 
-      # ----------------------------
-      # HTML
-      # ----------------------------
       - run: |
           mkdir -p dist
-          for file in slides/*.md; do
-            name=$(basename "$file" .md)
-            marp "$file" \
-              --html \
-              --theme themes/jp-pptx.css \
-              --allow-local-files \
-              -o "dist/$name.html"
-          done
-
-      - run: |
-          cp dist/physical-first.html dist/index.html || true
-
-      # ----------------------------
-      # PPTX
-      # ----------------------------
-      - run: |
-          mkdir -p dist/pptx
-          for file in slides/*.md; do
-            name=$(basename "$file" .md)
-            marp "$file" \
-              --pptx \
-              --pptx-editable=false \
-              --theme themes/jp-pptx.css \
-              --allow-local-files \
-              -o "dist/pptx/$name.pptx"
-          done
-
-      # ----------------------------
-      # Commit（差分があるときだけ）
-      # ----------------------------
-      - run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add dist
-          git diff --cached --quiet && echo "No changes" && exit 0
-          git commit -m "Auto-generate Marp HTML & PPTX slides"
-          git push
+          marp slides/*.md --html -o dist/index.html
