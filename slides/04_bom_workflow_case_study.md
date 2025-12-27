@@ -5,7 +5,7 @@ description: BOMを中核とした設計・調達・環境・輸出管理の統�
 author: Shinichi Samizo
 theme: jp-pptx　
 paginate: true
----
+---　
 
 # 設計から量産部品発注に至る  　　
 ## BOM運用フレームワーク
