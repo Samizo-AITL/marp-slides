@@ -3,7 +3,7 @@ marp: true
 title: 設計から量産部品発注に至るBOM運用フレームワーク
 description: BOMを中核とした設計・調達・環境・輸出管理の統合実務
 author: Shinichi Samizo
-theme: default
+theme: jp-pptx
 paginate: true
 ---
 
