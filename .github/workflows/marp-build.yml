@@ -24,7 +24,9 @@ jobs:
 
       - run: npm install -g @marp-team/marp-cli
 
+      # ----------------------------
       # HTML
+      # ----------------------------
       - run: |
           mkdir -p dist
           for file in slides/*.md; do
@@ -39,7 +41,9 @@ jobs:
       - run: |
           cp dist/physical-first.html dist/index.html || true
 
+      # ----------------------------
       # PPTX
+      # ----------------------------
       - run: |
           mkdir -p dist/pptx
           for file in slides/*.md; do
@@ -52,7 +56,9 @@ jobs:
               -o "dist/pptx/$name.pptx"
           done
 
-      # Commit
+      # ----------------------------
+      # Commit (差分があるときだけ)
+      # ----------------------------
       - run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
