@@ -5,33 +5,27 @@ on:
     paths:
       - "slides/**/*.md"
       - "themes/**/*.css"
+    paths-ignore:
+      - "dist/**"
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     permissions:
       contents: write
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: "20"
 
-      - name: Install Marp CLI
-        run: npm install -g @marp-team/marp-cli
+      - run: npm install -g @marp-team/marp-cli
 
-      # ----------------------------
-      # HTML 出力（GitHub Pages 用）
-      # ----------------------------
-      - name: Build HTML slides
-        run: |
-          set -e
+      # HTML
+      - run: |
           mkdir -p dist
           for file in slides/*.md; do
             name=$(basename "$file" .md)
@@ -42,16 +36,11 @@ jobs:
               -o "dist/$name.html"
           done
 
-      - name: Set index.html
-        run: |
+      - run: |
           cp dist/physical-first.html dist/index.html || true
 
-      # ----------------------------
-      # PPTX 出力（配布用・豆腐完全防止）
-      # ----------------------------
-      - name: Build PPTX slides
-        run: |
-          set -e
+      # PPTX
+      - run: |
           mkdir -p dist/pptx
           for file in slides/*.md; do
             name=$(basename "$file" .md)
@@ -63,13 +52,11 @@ jobs:
               -o "dist/pptx/$name.pptx"
           done
 
-      # ----------------------------
-      # Commit & Push
-      # ----------------------------
-      - name: Commit generated files
-        run: |
+      # Commit
+      - run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add dist
-          git commit -m "Auto-generate Marp HTML & PPTX slides" || echo "No changes"
+          git diff --cached --quiet && echo "No changes" && exit 0
+          git commit -m "Auto-generate Marp HTML & PPTX slides"
           git push
