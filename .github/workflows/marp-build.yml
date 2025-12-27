@@ -1,39 +1,20 @@
-name: Build Marp Slides
+- name: Build HTML slides
+  shell: bash
+  run: |
+    set -e
+    shopt -s nullglob
+    files=(slides/**/*.md)
+    if [ ${#files[@]} -eq 0 ]; then
+      echo "No slides found. Skip build."
+      exit 0
+    fi
 
-on:
-  push:
-    paths:
-      - "slides/**/*.md"
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - run: npm install -g @marp-team/marp-cli
-
-      - name: Build HTML slides
-        shell: bash
-        run: |
-          set -e
-          shopt -s nullglob
-          files=(slides/**/*.md)
-          if [ ${#files[@]} -eq 0 ]; then
-            echo "No slides found. Skip build."
-            exit 0
-          fi
-
-          mkdir -p dist
-          for file in "${files[@]}"; do
-            echo "Build $file"
-            marp "$file" --html -o "dist/$(basename "$file" .md).html"
-          done
+    mkdir -p dist
+    for file in "${files[@]}"; do
+      echo "Build $file"
+      marp "$file" \
+        --html \
+        --theme themes/jp-pptx.css \        # ← 追加（白背景・絵文字対応）
+        --allow-local-files \               # ← 追加（CI 安定化）
+        -o "dist/$(basename "$file" .md).html"
+    done
