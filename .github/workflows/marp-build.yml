@@ -21,6 +21,19 @@ jobs:
 
       - run: npm install -g @marp-team/marp-cli
 
-      - run: |
+      - name: Build HTML slides
+        shell: bash
+        run: |
+          set -e
+          shopt -s nullglob
+          files=(slides/**/*.md)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No slides found. Skip build."
+            exit 0
+          fi
+
           mkdir -p dist
-          marp slides/*.md --html -o dist/index.html
+          for file in "${files[@]}"; do
+            echo "Build $file"
+            marp "$file" --html -o "dist/$(basename "$file" .md).html"
+          done
