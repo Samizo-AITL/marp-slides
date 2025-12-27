@@ -11,6 +11,7 @@ on:
 
 jobs:
   build:
+    if: github.actor != 'github-actions'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -57,7 +58,7 @@ jobs:
           done
 
       # ----------------------------
-      # Commit (差分があるときだけ)
+      # Commit（差分があるときだけ）
       # ----------------------------
       - run: |
           git config user.name "github-actions"
