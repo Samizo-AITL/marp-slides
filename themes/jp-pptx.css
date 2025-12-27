@@ -1,11 +1,17 @@
 /* @theme jp-pptx */
 
+@font-face {
+  font-family: "NotoSansJP";
+  src: url("../fonts/NotoSansJP-Regular.otf") format("opentype");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "NotoSansJP";
+  src: url("../fonts/NotoSansJP-Bold.otf") format("opentype");
+  font-weight: bold;
+}
+
 section {
-  font-family:
-    "Yu Gothic",
-    "Yu Gothic UI",
-    "Meiryo",
-    "Hiragino Sans",
-    "Noto Sans JP",
-    sans-serif;
+  font-family: "NotoSansJP", sans-serif;
 }
