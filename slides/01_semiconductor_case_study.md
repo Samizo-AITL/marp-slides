@@ -3,7 +3,7 @@ marp: true
 theme: jp-pptx
 paginate: true
 title: 半導体プロセス開発・量産・事業判断のケーススタディ
-description: DRAM / LCD Driver / CD50-BoA に見る技術的成功と事業的敗北
+description: DRAM / LCD Driver / CD50-BoA に見る技術的成功と事業的敗北　
 ---
 
 # 半導体プロセス開発・量産・事業判断のケーススタディ  　　
