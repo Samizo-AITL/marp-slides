@@ -6,18 +6,17 @@ on:
       - "slides/**/*.md"
       - "themes/**/*.css"
     paths-ignore:
-      - ".github/workflows/**"
+      - "dist/**"
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     permissions:
       contents: write
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -28,53 +27,49 @@ jobs:
       - name: Install Marp CLI
         run: npm install -g @marp-team/marp-cli
 
-      # ----------------------------
-      # Build HTML slides
-      # ----------------------------
+      # ---------- HTML ----------
       - name: Build HTML slides
         shell: bash
         run: |
           set -e
           shopt -s nullglob
-
-          files=(slides/**/*.md)
+          files=(slides/*.md)
           if [ ${#files[@]} -eq 0 ]; then
-            echo "No slides found. Skip build."
+            echo "No slides found. Skip."
             exit 0
           fi
 
           mkdir -p dist
           for file in "${files[@]}"; do
-            name="$(basename "$file" .md)"
-            echo "Build $file -> dist/$name.html"
+            name=$(basename "$file" .md)
             marp "$file" \
               --html \
               --theme themes/jp-pptx.css \
-              --allow-local-files \
               -o "dist/$name.html"
           done
 
-      # ----------------------------
-      # Set index.html (optional)
-      # ----------------------------
-      - name: Set index.html
-        run: |
-          if [ -f dist/physical-first.html ]; then
-            cp dist/physical-first.html dist/index.html
-          else
-            first=$(ls dist/*.html | head -n 1 || true)
-            if [ -n "$first" ]; then
-              cp "$first" dist/index.html
-            fi
-          fi
+          # index.html を必ず作る
+          cp dist/"${files[0]##*/}".html dist/index.html || true
 
-      # ----------------------------
-      # Commit & Push generated files
-      # ----------------------------
+      # ---------- PPTX ----------
+      - name: Build PPTX slides
+        shell: bash
+        run: |
+          mkdir -p dist/pptx
+          for file in slides/*.md; do
+            name=$(basename "$file" .md)
+            marp "$file" \
+              --pptx \
+              --pptx-editable=false \
+              --theme themes/jp-pptx.css \
+              -o "dist/pptx/$name.pptx"
+          done
+
+      # ---------- Commit ----------
       - name: Commit generated files
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add dist
-          git commit -m "Auto-generate Marp HTML slides" || echo "No changes to commit"
+          git commit -m "Auto-generate Marp slides" || echo "No changes"
           git push
