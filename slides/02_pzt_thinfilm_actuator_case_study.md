@@ -3,7 +3,7 @@ marp: true
 title: 薄膜PZTアクチュエータ技術史と量産信頼性
 description: FeRAM起源からPrecisionCore µTFPまでの技術連続性と量産課題
 author: Shinichi Samizo
-theme: default
+theme: jp-pptx
 paginate: true
 ---
 
