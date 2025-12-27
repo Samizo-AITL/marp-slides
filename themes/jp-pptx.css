@@ -1,17 +1,18 @@
 /* @theme jp-pptx */
 
-@font-face {
-  font-family: "NotoSansJP";
-  src: url("../fonts/NotoSansJP-Regular.otf") format("opentype");
-  font-weight: normal;
-}
-
-@font-face {
-  font-family: "NotoSansJP";
-  src: url("../fonts/NotoSansJP-Bold.otf") format("opentype");
-  font-weight: bold;
-}
+/*
+  安全方針：
+  - @font-face は使用しない（CI / pptx で豆腐の原因）
+  - OS標準の日本語フォントにフォールバック
+  - pptx / HTML 両対応
+*/
 
 section {
-  font-family: "NotoSansJP", sans-serif;
+  font-family:
+    "Yu Gothic",
+    "YuGothic",
+    "Meiryo",
+    "MS Gothic",
+    "Hiragino Kaku Gothic ProN",
+    sans-serif;
 }
