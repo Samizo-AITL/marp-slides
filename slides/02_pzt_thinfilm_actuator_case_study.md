@@ -10,7 +10,7 @@ paginate: true
 # 薄膜PZTアクチュエータ  　
 ## 技術史と量産信頼性　
 
-**FeRAM起源から PrecisionCore µTFP まで**
+**FeRAM起源から PrecisionCore µTFP まで**　
 
 ---
 
