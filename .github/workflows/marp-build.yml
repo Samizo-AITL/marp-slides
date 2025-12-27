@@ -1,20 +1,80 @@
-- name: Build HTML slides
-  shell: bash
-  run: |
-    set -e
-    shopt -s nullglob
-    files=(slides/**/*.md)
-    if [ ${#files[@]} -eq 0 ]; then
-      echo "No slides found. Skip build."
-      exit 0
-    fi
+name: Build Marp Slides
 
-    mkdir -p dist
-    for file in "${files[@]}"; do
-      echo "Build $file"
-      marp "$file" \
-        --html \
-        --theme themes/jp-pptx.css \        # ← 追加（白背景・絵文字対応）
-        --allow-local-files \               # ← 追加（CI 安定化）
-        -o "dist/$(basename "$file" .md).html"
-    done
+on:
+  push:
+    paths:
+      - "slides/**/*.md"
+      - "themes/**/*.css"
+    paths-ignore:
+      - ".github/workflows/**"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Marp CLI
+        run: npm install -g @marp-team/marp-cli
+
+      # ----------------------------
+      # Build HTML slides
+      # ----------------------------
+      - name: Build HTML slides
+        shell: bash
+        run: |
+          set -e
+          shopt -s nullglob
+
+          files=(slides/**/*.md)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No slides found. Skip build."
+            exit 0
+          fi
+
+          mkdir -p dist
+          for file in "${files[@]}"; do
+            name="$(basename "$file" .md)"
+            echo "Build $file -> dist/$name.html"
+            marp "$file" \
+              --html \
+              --theme themes/jp-pptx.css \
+              --allow-local-files \
+              -o "dist/$name.html"
+          done
+
+      # ----------------------------
+      # Set index.html (optional)
+      # ----------------------------
+      - name: Set index.html
+        run: |
+          if [ -f dist/physical-first.html ]; then
+            cp dist/physical-first.html dist/index.html
+          else
+            first=$(ls dist/*.html | head -n 1 || true)
+            if [ -n "$first" ]; then
+              cp "$first" dist/index.html
+            fi
+          fi
+
+      # ----------------------------
+      # Commit & Push generated files
+      # ----------------------------
+      - name: Commit generated files
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add dist
+          git commit -m "Auto-generate Marp HTML slides" || echo "No changes to commit"
+          git push
