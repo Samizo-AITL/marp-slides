@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: write   # ← これ重要（403対策）
+      contents: write
 
     steps:
       - name: Checkout repository
@@ -26,30 +26,36 @@ jobs:
         run: npm install -g @marp-team/marp-cli
 
       # ----------------------------
-      # HTML 出力（Pages 用）
+      # HTML 出力（GitHub Pages 用）
       # ----------------------------
       - name: Build HTML slides
         run: |
           mkdir -p dist
           for file in slides/*.md; do
             name=$(basename "$file" .md)
-            marp "$file" --html -o "dist/$name.html"
+            marp "$file" \
+              --html \
+              --theme themes/jp-pptx.css \
+              -o "dist/$name.html"
           done
 
-      # index.html を代表スライドに
       - name: Set index.html
         run: |
           cp dist/physical-first.html dist/index.html || true
 
       # ----------------------------
-      # PPTX 出力（配布用）
+      # PPTX 出力（配布用・豆腐完全防止）
       # ----------------------------
       - name: Build PPTX slides
         run: |
           mkdir -p dist/pptx
           for file in slides/*.md; do
             name=$(basename "$file" .md)
-            marp "$file" --pptx -o "dist/pptx/$name.pptx"
+            marp "$file" \
+              --pptx \
+              --pptx-editable=false \
+              --theme themes/jp-pptx.css \
+              -o "dist/pptx/$name.pptx"
           done
 
       # ----------------------------
