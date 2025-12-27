@@ -8,11 +8,19 @@
 */
 
 section {
+  /* フォント */
   font-family:
     "Yu Gothic",
     "YuGothic",
     "Meiryo",
     "MS Gothic",
     "Hiragino Kaku Gothic ProN",
+    "Segoe UI Emoji",       /* ← 追加（Windows 絵文字） */
+    "Apple Color Emoji",    /* ← 追加（macOS 絵文字） */
+    "Noto Color Emoji",     /* ← 追加（Linux） */
     sans-serif;
+
+  /* 見た目（← これが無かった） */
+  background: white;
+  color: black;
 }
