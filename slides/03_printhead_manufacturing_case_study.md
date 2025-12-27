@@ -2,7 +2,7 @@
 marp: true
 title: プリントヘッド生産における量産・BCP・4M対応事例
 description: ドライバIC・COF・接合・セキュリティを横断した実践的製造マネジメント
-author: Shinichi Samizo
+author: Shinichi Samizo　
 theme: jp-pptx
 paginate: true
 ---
