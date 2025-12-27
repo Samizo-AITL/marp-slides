@@ -10,7 +10,7 @@ paginate: true
 # プリントヘッド生産  　
 ## 量産・BCP・4M対応の実践事例
 
-**Semiconductor × Packaging × Manufacturing System**
+**Semiconductor × Packaging × Manufacturing System**　
 
 ---
 
